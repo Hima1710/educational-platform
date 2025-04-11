@@ -1,114 +1,107 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
-  Box,
   Container,
   Typography,
-  Button,
   Grid,
   Card,
   CardContent,
   CardMedia,
+  Button,
+  Box,
 } from '@mui/material';
+import SchoolIcon from '@mui/icons-material/School';
 import ScienceIcon from '@mui/icons-material/Science';
-import PhysicsIcon from '@mui/icons-material/Physics';
-import BiotechIcon from '@mui/icons-material/Biotech';
-
-const subjects = [
-  {
-    title: 'الكيمياء',
-    description: 'دراسة المادة وتفاعلاتها وتغيراتها',
-    icon: <ScienceIcon sx={{ fontSize: 60 }} />,
-    color: '#4caf50',
-  },
-  {
-    title: 'الفيزياء',
-    description: 'دراسة القوى والطاقة والحركة',
-    icon: <PhysicsIcon sx={{ fontSize: 60 }} />,
-    color: '#2196f3',
-  },
-  {
-    title: 'علوم متكاملة',
-    description: 'دراسة شاملة للعلوم الطبيعية',
-    icon: <BiotechIcon sx={{ fontSize: 60 }} />,
-    color: '#f50057',
-  },
-];
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 function Home() {
+  const navigate = useNavigate();
+
+  const subjects = [
+    {
+      title: 'الكيمياء',
+      description: 'دروس في الكيمياء للمرحلة الثانوية',
+      icon: <ScienceIcon sx={{ fontSize: 60 }} />,
+      color: '#4caf50',
+    },
+    {
+      title: 'الفيزياء',
+      description: 'دروس في الفيزياء للمرحلة الثانوية',
+      icon: <CalculateIcon sx={{ fontSize: 60 }} />,
+      color: '#2196f3',
+    },
+    {
+      title: 'العلوم المتكاملة',
+      description: 'دروس متكاملة في العلوم',
+      icon: <SchoolIcon sx={{ fontSize: 60 }} />,
+      color: '#9c27b0',
+    },
+  ];
+
   return (
-    <Box>
-      {/* Hero Section */}
-      <Box
-        sx={{
-          bgcolor: 'primary.main',
-          color: 'white',
-          py: 8,
-          textAlign: 'center',
-        }}
-      >
-        <Container maxWidth="md">
-          <Typography variant="h2" component="h1" gutterBottom>
-            مدرسة أمنية سعيد التعليمية
-          </Typography>
-          <Typography variant="h5" component="h2" gutterBottom>
-            تعليم متميز في الكيمياء والفيزياء والعلوم المتكاملة
-          </Typography>
-          <Button
-            component={RouterLink}
-            to="/subjects"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ mt: 4 }}
-          >
-            ابدأ التعلم الآن
-          </Button>
-        </Container>
+    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+      <Box textAlign="center" mb={6}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="primary"
+          gutterBottom
+          sx={{ fontWeight: 'bold' }}
+        >
+          أهلاً بك في منصتنا التعليمية
+        </Typography>
+        <Typography variant="h5" color="text.secondary" paragraph>
+          منصة تعليمية متكاملة للكيمياء والفيزياء والعلوم للمرحلة الثانوية
+        </Typography>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => navigate('/subjects')}
+          sx={{ mt: 4 }}
+        >
+          استكشف المواد الدراسية
+        </Button>
       </Box>
 
-      {/* Subjects Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Typography variant="h3" component="h2" textAlign="center" gutterBottom>
-          المواد الدراسية
-        </Typography>
-        <Grid container spacing={4} sx={{ mt: 2 }}>
-          {subjects.map((subject) => (
-            <Grid item xs={12} md={4} key={subject.title}>
-              <Card
+      <Grid container spacing={4} justifyContent="center">
+        {subjects.map((subject) => (
+          <Grid item xs={12} sm={6} md={4} key={subject.title}>
+            <Card
+              sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: '0.3s',
+                '&:hover': {
+                  transform: 'translateY(-10px)',
+                  boxShadow: 6,
+                },
+              }}
+            >
+              <Box
                 sx={{
-                  height: '100%',
+                  p: 3,
                   display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'transform 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.02)',
-                  },
+                  justifyContent: 'center',
+                  bgcolor: subject.color,
+                  color: 'white',
                 }}
               >
-                <Box
-                  sx={{
-                    p: 3,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    bgcolor: subject.color,
-                    color: 'white',
-                  }}
-                >
-                  {subject.icon}
-                </Box>
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    {subject.title}
-                  </Typography>
-                  <Typography>{subject.description}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+                {subject.icon}
+              </Box>
+              <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {subject.title}
+                </Typography>
+                <Typography color="text.secondary">
+                  {subject.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 }
 
