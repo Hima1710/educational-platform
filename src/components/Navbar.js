@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -29,6 +29,7 @@ import {
   Home as HomeIcon,
   Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 
 const pages = [
@@ -47,6 +48,8 @@ function Navbar({ children, toggleColorMode }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -66,6 +69,12 @@ function Navbar({ children, toggleColorMode }) {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    navigate('/login');
   };
 
   const drawer = (
@@ -193,6 +202,20 @@ function Navbar({ children, toggleColorMode }) {
             <IconButton onClick={toggleColorMode} color="inherit">
               {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
+            {isLoggedIn ? (
+              <>
+                <IconButton color="inherit" onClick={() => navigate('/profile')}>
+                  <PersonIcon />
+                </IconButton>
+                <IconButton color="inherit" onClick={handleLogout}>
+                  <LogoutIcon />
+                </IconButton>
+              </>
+            ) : (
+              <Button color="inherit" onClick={() => navigate('/login')}>
+                تسجيل الدخول
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

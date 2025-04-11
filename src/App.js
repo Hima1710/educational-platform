@@ -1,14 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Subjects from './pages/Subjects';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
+
+// مكون لحماية المسارات
+function ProtectedRoute({ children }) {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  return isLoggedIn ? children : <Navigate to="/login" />;
+}
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -34,14 +40,13 @@ function App() {
             main: mode === 'light' ? '#dc004e' : '#f48fb1',
           },
           background: {
-            default: mode === 'light' ? '#ffffff' : '#121212',
+            default: mode === 'light' ? '#f5f5f5' : '#121212',
             paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
           },
         },
         typography: {
           fontFamily: 'Cairo, sans-serif',
         },
-        direction: 'rtl',
       }),
     [mode],
   );
@@ -49,18 +54,39 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
-        <Router>
+      <Router>
+        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
           <Navbar toggleColorMode={colorMode.toggleColorMode} />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/subjects" element={<Subjects />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/subjects"
+              element={
+                <ProtectedRoute>
+                  <Subjects />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
-        </Router>
-      </Box>
+        </Box>
+      </Router>
     </ThemeProvider>
   );
 }
