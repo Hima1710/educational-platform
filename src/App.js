@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -9,12 +9,6 @@ import Subjects from './pages/Subjects';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
-
-// مكون لحماية المسارات
-function ProtectedRoute({ children }) {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  return isLoggedIn ? children : <Navigate to="/login" />;
-}
 
 function App() {
   const [mode, setMode] = useState('light');
@@ -58,32 +52,11 @@ function App() {
         <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
           <Navbar toggleColorMode={colorMode.toggleColorMode} />
           <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/subjects" element={<Subjects />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/subjects"
-              element={
-                <ProtectedRoute>
-                  <Subjects />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
           </Routes>
         </Box>
       </Router>
